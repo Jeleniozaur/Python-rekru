@@ -7,7 +7,7 @@ import datetime
 def InvalidArgvException():
     print("Arguments invalid!")
     print("Available arguments are:\n1.Zip filename\n2.Content to be added to VERSION.txt.\n3.Optional - set it to 't' to update updated.txt with current date.")
-    sys.exit()
+    exit()
 
 def sh(cmd):
     os.system(cmd)
@@ -19,18 +19,21 @@ def CreateTempFileAndZipIt(filename, content, archive):
     print('created ' + filename + ' and added to ' + archive)
 
 def AppendToZip(filename, content, archive):
-    #check if file exists in zip if yes then unzip
+    #if file exists in zip if yes then unzip and append to unzipped file
     zp = zipfile.ZipFile(archive)
     if filename in zp.namelist():
         sh("unzip -q -p " + archive + " " + filename + " > /tmp/"+filename)
         sh("echo " + content + " >> /tmp/"+filename)
-        print('appended ' + filename + ' to ' + archive)
+        print('appended to ' + filename)
     else:
+        #if file doesn't exist in zip then create a new one
         sh("echo " + content + " > /tmp/"+filename)
         print('created ' + filename + ' and added to ' + archive)
-
+    
+    #push file back to the archive and remove temp file
     sh("zip -q -u -j " + archive + " /tmp/"+filename)
     sh("rm /tmp/"+filename)
+    print(filename + ' zipped to ' + archive)
 
 def DoStuff():
     # Get parameters
@@ -43,6 +46,7 @@ def DoStuff():
         o = sys.argv[3]  # optional, for updating updated.txt, must be set to 't' to work
     if len(sys.argv) > 4:
         print("More than 3 arguments were specified, they are going to be ignored")
+        exit()
 
     # Check for argv syntax
     if not z.endswith('.zip'):
