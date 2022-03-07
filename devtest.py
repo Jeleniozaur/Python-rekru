@@ -44,7 +44,6 @@ def DoStuff():
         o = sys.argv[3]  # optional, for updating updated.txt, must be set to 't' to work
     if len(sys.argv) > 4:
         print("More than 3 arguments were specified, they are going to be ignored")
-        exit()
     # Check for argv syntax
     if not z.endswith('.zip'):
         print("Please provide a whole filename such as " + z + '.zip')
